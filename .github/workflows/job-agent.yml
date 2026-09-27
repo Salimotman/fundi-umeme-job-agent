@@ -1,0 +1,27 @@
+name: Fundi Umeme Job Agent
+
+on:
+  schedule:
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+jobs:
+  search-jobs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pakua files
+        uses: actions/checkout@v4
+
+      - name: Weka Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install packages
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Endesha Job Agent
+        run: |
+          python job_agent.py
