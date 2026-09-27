@@ -1,32 +1,41 @@
 import requests
 from bs4 import BeautifulSoup
 
-KEYWORDS = [
-    "Fundi Umeme",
-    "Electrical Technician",
-    "Electrician",
-    "Maintenance Electrician"
-]
+URL = "https://www.zoomtanzania.net/jobs/"
 
-URLS = [
-    "https://www.zoomtanzania.net/jobs/",
+KEYWORDS = [
+    "fundi umeme",
+    "electrician",
+    "electrical technician",
+    "maintenance electrician"
 ]
 
 def tafuta_kazi():
-    for url in URLS:
-        try:
-            response = requests.get(url, timeout=20)
-            soup = BeautifulSoup(response.text, "html.parser")
+    print("Natafuta kazi za Fundi Umeme...")
 
-            text = soup.get_text(" ", strip=True)
+    try:
+        response = requests.get(
+            URL,
+            timeout=30,
+            headers={"User-Agent": "Mozilla/5.0"}
+        )
+        response.raise_for_status()
 
-            for keyword in KEYWORDS:
-                if keyword.lower() in text.lower():
-                    print(f"Kazi imepatikana: {keyword}")
-                    print(url)
+        soup = BeautifulSoup(response.text, "html.parser")
+        text = soup.get_text(" ", strip=True).lower()
 
-        except Exception as e:
-            print("Hitilafu:", e)
+        found = False
+
+        for keyword in KEYWORDS:
+            if keyword in text:
+                print("Kazi imepatikana:", keyword)
+                found = True
+
+        if not found:
+            print("Hakuna kazi iliyopatikana kwa maneno haya kwa sasa.")
+
+    except Exception as error:
+        print("Hitilafu:", error)
 
 if __name__ == "__main__":
     tafuta_kazi()
